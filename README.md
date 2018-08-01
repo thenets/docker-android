@@ -16,11 +16,16 @@ RUN mkdir $APP_DIR
 WORKDIR $APP_DIR
 
 # Add source code
-ADD ./ $APP_DIR
+ADD ./ $APP_DIR 
 
 RUN set -x \
+    # Replace CRLF by LF (Fix if you're using Windows)
+    && apt-get install -y dos2unix \
+    && dos2unix ** \
     # Build APK
-    && ./gradlew assemble
+    && chmod +x gradlew \
+    && ./gradlew assemble \
+
 ```
 
 And build it with `docker build -t myaccount/myproject .`.
